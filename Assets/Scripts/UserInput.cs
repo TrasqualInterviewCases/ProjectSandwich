@@ -25,15 +25,7 @@ public class UserInput : MonoBehaviour
 
             mouseStartPos = Input.mousePosition;
         }
-        if (Input.GetMouseButton(0))
-        {
-            mouseEndPos = Input.mousePosition;
-            curRotatableObject = hit.transform.GetComponent<RotatableObject>();
-            if(mouseStartPos != mouseEndPos && curRotatableObject != null)
-            {
-                curRotatableObject.RotateObject(Direction());
-            }
-        }
+
         if (Input.GetMouseButtonUp(0))
         {
             curRotatableObject.isRotated = false; //close box collider?
@@ -41,11 +33,24 @@ public class UserInput : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            mouseEndPos = Input.mousePosition;
+            curRotatableObject = hit.transform.GetComponent<RotatableObject>();
+            if (mouseStartPos != mouseEndPos && curRotatableObject != null)
+            {
+                curRotatableObject.RotateObject(Direction());
+            }
+        }
+    }
+
     private Vector3 Direction()
     {
         if (IsVerticalDirection())
         {
-            return mouseEndPos.y - mouseStartPos.y > 0 ? Vector3.up : Vector3.down;
+            return mouseEndPos.y - mouseStartPos.y > 0 ? Vector3.forward : Vector3.back;
         }
         else
         {
@@ -55,6 +60,6 @@ public class UserInput : MonoBehaviour
 
     private bool IsVerticalDirection()
     {
-        return ((mouseEndPos.x - mouseStartPos.x) < (mouseEndPos.y - mouseStartPos.y));
+        return (Mathf.Abs((mouseEndPos.y - mouseStartPos.y)) > Mathf.Abs((mouseEndPos.x - mouseStartPos.x)));
     }
 }
