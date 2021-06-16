@@ -28,8 +28,11 @@ public class UserInput : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            curRotatableObject.isRotated = false; //close box collider?
-            curRotatableObject = null;
+            if(curRotatableObject != null)
+            {
+                curRotatableObject.isBusy = false; //close box collider?
+                curRotatableObject = null;
+            }
         }
     }
 
@@ -38,7 +41,10 @@ public class UserInput : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             mouseEndPos = Input.mousePosition;
-            curRotatableObject = hit.transform.GetComponent<RotatableObject>();
+            if(hit.collider != null)
+            {
+                curRotatableObject = hit.transform.GetComponent<RotatableObject>();
+            }
             if (mouseStartPos != mouseEndPos && curRotatableObject != null)
             {
                 curRotatableObject.RotateObject(Direction());

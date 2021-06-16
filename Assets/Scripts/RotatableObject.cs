@@ -7,35 +7,37 @@ public class RotatableObject : MonoBehaviour
     private ObjectType type;
 
     [HideInInspector]
-    public bool isRotated;
+    public bool isBusy;
+    [HideInInspector]
     public float height;
 
     private RotatableObject neighbor;
+    private Vector3 originalPosition;
 
     private void Start()
     {
-        height = GetComponent<MeshRenderer>().bounds.size.y;
+        height = GetComponent<BoxCollider>().bounds.size.y;
+        originalPosition = transform.position;
     }
 
     public void RotateObject(Vector3 rotationDirection)
     {
-        if (isRotated) { return; }
+        if (isBusy) { return; }
 
-        var neighborPos = new Vector3(transform.position.x,height/2f,transform.position.z) + rotationDirection;
+        var neighborPos = new Vector3(transform.position.x,0f,transform.position.z) + rotationDirection;
 
         if (!GameManager.rotatableObjectPositions.ContainsKey(neighborPos))
         {
-            isRotated = true;
+            isBusy = true;
             transform.DOShakeScale(0.5f, rotationDirection, 1, 1, true).OnComplete(()=> 
             {
                 transform.DOPlayBackwards();
-                isRotated = false; 
             });
             return;
         }
 
         neighbor = GameManager.rotatableObjectPositions[neighborPos];
-        var pointToMoveTo = neighborPos + new Vector3(0, NewPositionY(), 0);
+        var pointToMoveTo = neighborPos + new Vector3(0, neighbor.height + height, 0);
 
         Sequence s = DOTween.Sequence();
         s.Append(transform.DOJump(pointToMoveTo, 1, 1, 1f, false));
@@ -44,16 +46,11 @@ public class RotatableObject : MonoBehaviour
             transform.SetParent(neighbor.transform);
             neighbor.height += height;
             GetComponent<Collider>().enabled = false;
+            GameManager.rotatableObjectPositions.Remove(originalPosition);
         });
 
         //Check if win condition is met
-        //Remove from rotatableObjectPositions List
         //Add to UndoList
-    }
-
-    private float NewPositionY()
-    {
-        return neighbor.height > height ? neighbor.height : height;
     }
 
     public void UnRotateObject(/*RotationInfo*/)
