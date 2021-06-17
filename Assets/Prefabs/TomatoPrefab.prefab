@@ -92,6 +92,8 @@ GameObject:
   - component: {fileID: 6702156864214814184}
   - component: {fileID: 6702156864214814187}
   - component: {fileID: 6702156864214814186}
+  - component: {fileID: 471225867}
+  - component: {fileID: 471225868}
   m_Layer: 6
   m_Name: TomatoPrefab
   m_TagString: Untagged
@@ -142,3 +144,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.2, z: 0.9}
   m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!114 &471225867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6702156864214813973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e569d695e925ec4084cb40b9b911835, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &471225868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6702156864214813973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88ac10dd24e5b2541ad698adf076d7a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

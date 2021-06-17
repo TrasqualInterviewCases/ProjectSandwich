@@ -1,46 +1,73 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static Dictionary<Vector3,MovableObject> rotatableObjectPositions = new Dictionary<Vector3, MovableObject>();
-    public static List<MovableObject> movedObjects = new List<MovableObject>();
+    [SerializeField]
+    private UserInput userInput;
+    [SerializeField]
+    private GameObject winPanel;
+
+    public static GameManager instance;
+
+    public List<MovableObject> movableObjects = new List<MovableObject>();
+    public Dictionary<Vector3,MovableObject> rotatableObjectPositions = new Dictionary<Vector3, MovableObject>();
+    public List<MovableObject> movedObjects = new List<MovableObject>();
+
+    private void Awake()
+    {
+        if(instance != null)
+        {
+            Destroy(this);
+        }
+        instance = this;
+    }
 
     private void Start()
     {
-        InitializePositionList();
+        InitializeLists();
     }
 
-    private void InitializePositionList() //use dictionary instead?
+    private void InitializeLists() //use dictionary instead?
     {
-        MovableObject[] rotatableObjects = FindObjectsOfType<MovableObject>();
-        foreach (var rotatable in rotatableObjects)
+        MovableObject[] movables = FindObjectsOfType<MovableObject>();
+        foreach (var movable in movables)
         {
-            rotatableObjectPositions.Add(rotatable.transform.position,rotatable);
+            movableObjects.Add(movable);
+            rotatableObjectPositions.Add(movable.transform.position, movable);
         }
     }
 
-    public static void CheckIfWinConditionIsMet(MovableObject movableObject)
+    public void CheckIfWinConditionIsMet()
     {
-        var childMovableObject = movableObject.transform.GetChild(1).GetComponent<MovableObject>();
-        if (childMovableObject != null)
+        if(movedObjects.Count == movableObjects.Count-1)
         {
-            if (movableObject.ObjectType == ObjectType.Cap && childMovableObject.ObjectType == ObjectType.Cap)
+        var highestObject = movableObjects.OrderByDescending(y => y.transform.position.y).First();
+        var lowestObject = movableObjects.OrderByDescending(y => y.transform.position.y).Last();
+
+            if (lowestObject.ObjectType == ObjectType.Cap && highestObject.ObjectType == ObjectType.Cap)
             {
-                Debug.Log("Congratulations you win!");
+                WinGame();
             }
-            else
-                Debug.Log("the Child type isn't Cap");
         }
-        else
-        Debug.Log("the child isn't a movableObject");
+    }
+
+    private void WinGame()
+    {
+        userInput.enabled = false;
+        winPanel.SetActive(true);
     }
 
     public void OnUndoButtonClicked()
     {
         if (movedObjects.Count == 0) return;
-
         movedObjects[movedObjects.Count - 1].UnMoveObject();
+    }
+
+    public void OnReplayButtonClicked()
+    {
+        SceneManager.LoadScene(0);
     }
 }

@@ -7,25 +7,34 @@ public class MovableObject : MonoBehaviour
 
     [HideInInspector]
     public bool isBusy;
-    //[HideInInspector]
+    [HideInInspector]
     public float height;
 
+    private GameManager gm;
+    private UserInput userInput;
     private MovableObject neighbor;
     private Vector3 originalPosition;
-    private MoverBase mover;
-    private IShaker shaker;
+
+    private MoverBase mover; //Using base classes so we can use different types of movements and shakes without breaking the code.
+    private ShakerBase shaker;
 
     [HideInInspector]
     public ObjectType ObjectType { get { return type; } }
 
     private void Start()
     {
+        gm = GameManager.instance;
+        userInput = FindObjectOfType<UserInput>();
         mover = GetComponent<MoverBase>();
         if (mover)
         {
             mover.OnMovementCompleted += OnMovementCompleteCallback;
         }
-        shaker = GetComponent<IShaker>();
+        shaker = GetComponent<ShakerBase>();
+        if (shaker)
+        {
+            shaker.OnShakeCompleted += OnShakeCompleteCallBack;
+        }
         height = GetComponent<BoxCollider>().bounds.size.y;
         originalPosition = transform.position;
     }
@@ -34,22 +43,30 @@ public class MovableObject : MonoBehaviour
     {
         if (isBusy) { return; }
 
-        isBusy = true;
+
         var neighborPos = new Vector3(transform.position.x, 0f, transform.position.z) + rotationDirection;
 
-        if (!GameManager.rotatableObjectPositions.ContainsKey(neighborPos))
+        if (!gm.rotatableObjectPositions.ContainsKey(neighborPos))
         {
-            if (shaker != null)
+            if (shaker)
             {
+                isBusy = true; //To Prevent user from interacting with this object while it's moving.
                 shaker.Shake(rotationDirection);
             }
             return;
         }
-
-        neighbor = GameManager.rotatableObjectPositions[neighborPos];
-        var pointToMoveTo = neighborPos + new Vector3(0, neighbor.height + height, 0);
-
-        mover.Move(pointToMoveTo, rotationDirection);
+        else
+        {
+            isBusy = true; //To Prevent user from interacting with this object while it's moving. Calling this twice so the movement works even if there is no Shaker script on object.
+            neighbor = gm.rotatableObjectPositions[neighborPos];
+            var pointToMoveTo = neighborPos + new Vector3(0, neighbor.height + height, 0);
+            if (mover)
+            {
+                GetComponent<Collider>().enabled = false;
+                userInput.enabled = false; //Disabling user input to prevent user from moving other objects while this one is moving.
+                mover.Move(pointToMoveTo, rotationDirection);
+            }
+        }
     }
 
     private void OnMovementCompleteCallback(bool isForwardMovement)
@@ -58,24 +75,33 @@ public class MovableObject : MonoBehaviour
         {
             transform.SetParent(neighbor.transform);
             neighbor.height += height;
-            GetComponent<Collider>().enabled = false;
-            GameManager.rotatableObjectPositions.Remove(originalPosition);
-            GameManager.movedObjects.Add(this);
-            GameManager.CheckIfWinConditionIsMet(this);
+            gm.rotatableObjectPositions.Remove(originalPosition);
+            gm.movedObjects.Add(this);
+            gm.CheckIfWinConditionIsMet();
+            isBusy = false;
+            userInput.enabled = true;
         }
         else
         {
-            Debug.Log("false complete message recieved.");
             transform.SetParent(null);
             neighbor.height -= height;
             GetComponent<Collider>().enabled = true;
-            GameManager.rotatableObjectPositions.Add(originalPosition,this);
-            GameManager.movedObjects.Remove(this);
+            gm.rotatableObjectPositions.Add(originalPosition,this);
+            gm.movedObjects.Remove(this);
+            isBusy = false;
+            userInput.enabled = true;
         }
+    }
+
+    private void OnShakeCompleteCallBack()
+    {
+        isBusy = false;
     }
 
     public void UnMoveObject()
     {
+        isBusy = true;
+        userInput.enabled = false;
         mover.UnMove();
     }
 }
