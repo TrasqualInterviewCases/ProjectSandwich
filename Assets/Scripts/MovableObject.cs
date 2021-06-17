@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using DG.Tweening;
 
 public class MovableObject : MonoBehaviour
 {
@@ -15,6 +14,9 @@ public class MovableObject : MonoBehaviour
     private Vector3 originalPosition;
     private MoverBase mover;
     private IShaker shaker;
+
+    [HideInInspector]
+    public ObjectType objectType { get { return type; } }
 
     private void Start()
     {
@@ -47,7 +49,7 @@ public class MovableObject : MonoBehaviour
         neighbor = GameManager.rotatableObjectPositions[neighborPos];
         var pointToMoveTo = neighborPos + new Vector3(0, neighbor.height + height, 0);
 
-        mover.Move(pointToMoveTo,rotationDirection);
+        mover.Move(pointToMoveTo, rotationDirection);
     }
 
     private void OnMovementCompleteCallback()
@@ -56,7 +58,7 @@ public class MovableObject : MonoBehaviour
         neighbor.height += height;
         GetComponent<Collider>().enabled = false;
         GameManager.rotatableObjectPositions.Remove(originalPosition);
-        //Check if win condition is met (GAME MANAGER)
+        GameManager.CheckIfWinConditionIsMet(this);
         //Add to UndoList
     }
 

@@ -19,4 +19,20 @@ public class GameManager : MonoBehaviour
             rotatableObjectPositions.Add(rotatable.transform.position,rotatable);
         }
     }
+
+    public static void CheckIfWinConditionIsMet(MovableObject movableObject)
+    {
+        var childMovableObject = movableObject.transform.GetChild(1).GetComponent<MovableObject>();
+        if (childMovableObject != null)
+        {
+            if (movableObject.objectType == ObjectType.Cap && childMovableObject.objectType == ObjectType.Cap)
+            {
+                Debug.Log("Congratulations you win!");
+            }
+            else
+                Debug.Log("the Child type isn't Cap");
+        }
+        else
+        Debug.Log("the child isn't a movableObject");
+    }
 }
