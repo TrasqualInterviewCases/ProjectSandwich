@@ -9,7 +9,7 @@ public class JumpMover : MoverBase
     {
         var differenceInY = GetComponent<MovableObject>().height;
         newPosition = new Vector3(newPosition.x, newPosition.y - differenceInY, newPosition.z);
-        jumpTween = transform.DOJump(newPosition, 0.5f, 1, 0.2f, false).SetAutoKill(false).OnComplete(() =>
+        jumpTween = transform.DOJump(newPosition, 0.5f, 1, 0.2f, false).SetEase(Ease.Linear).SetAutoKill(false).OnComplete(() =>
         {
             MovementCompleted(true);
         });

@@ -78,7 +78,6 @@ public class MovableObject : MonoBehaviour
             gm.rotatableObjectPositions.Remove(originalPosition);
             gm.movedObjects.Add(this);
             gm.CheckIfWinConditionIsMet();
-            isBusy = false;
             userInput.enabled = true;
         }
         else
