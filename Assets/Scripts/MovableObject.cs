@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class RotatableObject : MonoBehaviour
+public class MovableObject : MonoBehaviour
 {
     [SerializeField]
     private ObjectType type;
@@ -11,42 +11,52 @@ public class RotatableObject : MonoBehaviour
     //[HideInInspector]
     public float height;
 
-    private RotatableObject neighbor;
+    private MovableObject neighbor;
     private Vector3 originalPosition;
+    private MoverBase mover;
+    private IShaker shaker;
 
     private void Start()
     {
+        mover = GetComponent<MoverBase>();
+        if (mover)
+        {
+            mover.OnMovementCompleted += OnMovementCompleteCallback;
+        }
+        shaker = GetComponent<IShaker>();
         height = GetComponent<BoxCollider>().bounds.size.y;
         originalPosition = transform.position;
     }
 
-    public void RotateObject(Vector3 rotationDirection)
+    public void MoveObject(Vector3 rotationDirection)
     {
         if (isBusy) { return; }
 
+        isBusy = true;
         var neighborPos = new Vector3(transform.position.x, 0f, transform.position.z) + rotationDirection;
 
         if (!GameManager.rotatableObjectPositions.ContainsKey(neighborPos))
         {
-            isBusy = true;
-            transform.DOShakeScale(0.5f, rotationDirection/3f, 10, 90, true);
+            if (shaker != null)
+            {
+                shaker.Shake(rotationDirection);
+            }
             return;
         }
 
         neighbor = GameManager.rotatableObjectPositions[neighborPos];
         var pointToMoveTo = neighborPos + new Vector3(0, neighbor.height + height, 0);
 
-        Sequence s = DOTween.Sequence();
-        s.Append(transform.DOJump(pointToMoveTo, 0.5f, 1, 0.3f, false));
-        s.Join(transform.DORotate(-Vector3.Cross(rotationDirection, transform.up) * 180, 0.3f)).OnComplete(() =>
-         {
-             transform.SetParent(neighbor.transform);
-             neighbor.height += height;
-             GetComponent<Collider>().enabled = false;
-             GameManager.rotatableObjectPositions.Remove(originalPosition);
-         });
+        mover.Move(pointToMoveTo,rotationDirection);
+    }
 
-        //Check if win condition is met
+    private void OnMovementCompleteCallback()
+    {
+        transform.SetParent(neighbor.transform);
+        neighbor.height += height;
+        GetComponent<Collider>().enabled = false;
+        GameManager.rotatableObjectPositions.Remove(originalPosition);
+        //Check if win condition is met (GAME MANAGER)
         //Add to UndoList
     }
 

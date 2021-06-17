@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static Dictionary<Vector3,RotatableObject> rotatableObjectPositions = new Dictionary<Vector3, RotatableObject>();
+    public static Dictionary<Vector3,MovableObject> rotatableObjectPositions = new Dictionary<Vector3, MovableObject>();
 
     private void Start()
     {
@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     private void InitializePositionList() //use dictionary instead?
     {
-        RotatableObject[] rotatableObjects = FindObjectsOfType<RotatableObject>();
+        MovableObject[] rotatableObjects = FindObjectsOfType<MovableObject>();
         foreach (var rotatable in rotatableObjects)
         {
             rotatableObjectPositions.Add(rotatable.transform.position,rotatable);

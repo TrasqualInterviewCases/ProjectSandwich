@@ -8,8 +8,7 @@ public class UserInput : MonoBehaviour
     private Vector3 mouseEndPos;
 
     private Camera cam;
-    private RaycastHit hit;
-    private RotatableObject curRotatableObject;
+    private MovableObject curRotatableObject;
 
     private void Start()
     {
@@ -18,36 +17,35 @@ public class UserInput : MonoBehaviour
 
     private void Update()
     {
+        RaycastHit hit;
+
         if (Input.GetMouseButtonDown(0))
         {
             Ray camRay = cam.ScreenPointToRay(Input.mousePosition);
-            Physics.Raycast(camRay, out hit, Mathf.Infinity, mask);
+            
+            if(Physics.Raycast(camRay, out hit, Mathf.Infinity, mask))
+            {
+                curRotatableObject = hit.transform.GetComponent<MovableObject>();
+            }
 
             mouseStartPos = Input.mousePosition;
         }
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            if(curRotatableObject != null)
-            {
-                curRotatableObject.isBusy = false; //close box collider?
-                curRotatableObject = null;
-            }
-        }
-    }
-
-    private void FixedUpdate()
-    {
         if (Input.GetMouseButton(0))
         {
             mouseEndPos = Input.mousePosition;
-            if(hit.collider != null)
+            if ((mouseStartPos - mouseEndPos).magnitude >= 0.5f && curRotatableObject != null)
             {
-                curRotatableObject = hit.transform.GetComponent<RotatableObject>();
+                curRotatableObject.MoveObject(Direction());
             }
-            if ((mouseStartPos-mouseEndPos).magnitude >= 0.1f && curRotatableObject != null)
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (curRotatableObject != null)
             {
-                curRotatableObject.RotateObject(Direction());
+                curRotatableObject.isBusy = false; //close box collider?
+                curRotatableObject = null;
             }
         }
     }
