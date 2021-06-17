@@ -28,15 +28,14 @@ public class UserInput : MonoBehaviour
             if(Physics.Raycast(camRay, out hit, Mathf.Infinity, mask))
             {
                 curRotatableObject = hit.transform.GetComponent<MovableObject>();
+                mouseStartPos = Input.mousePosition;
             }
-
-            mouseStartPos = Input.mousePosition;
         }
 
         if (Input.GetMouseButton(0))
         {
             mouseEndPos = Input.mousePosition;
-            if ((mouseStartPos - mouseEndPos).magnitude > 0 && curRotatableObject != null && !isMovingObject)
+            if ((mouseStartPos - mouseEndPos).magnitude > 1f && curRotatableObject != null && !isMovingObject)
             {
                 isMovingObject = true; //To prevent registiring a second movement while the current movement is in progress.
                 curRotatableObject.MoveObject(Direction());

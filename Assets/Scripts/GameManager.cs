@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,12 +12,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject winPanel;
 
-    public static GameManager instance;
-
     public List<MovableObject> movableObjects = new List<MovableObject>();
     public Dictionary<Vector3,MovableObject> rotatableObjectPositions = new Dictionary<Vector3, MovableObject>();
     public List<MovableObject> movedObjects = new List<MovableObject>();
 
+    private Camera cam;
+    private bool isWon;
+    
+    public static GameManager instance;
     private void Awake()
     {
         if(instance != null)
@@ -27,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        cam = Camera.main;
         InitializeLists();
     }
 
@@ -49,25 +54,34 @@ public class GameManager : MonoBehaviour
 
             if (lowestObject.ObjectType == ObjectType.Cap && highestObject.ObjectType == ObjectType.Cap)
             {
-                WinGame();
+                isWon = true;
+                StartCoroutine(WinGame());
             }
         }
     }
 
-    private void WinGame()
+    private IEnumerator WinGame()
     {
         userInput.enabled = false;
+        cam.transform.DOMove(new Vector3(0f, 18f, -23f), 2f, false);
+        cam.transform.DORotate(new Vector3(32f, 0f, 0f), 2f);
+        yield return new WaitForSeconds(2f);
         winPanel.SetActive(true);
     }
 
     public void OnUndoButtonClicked()
     {
-        if (movedObjects.Count == 0) return;
+        if (movedObjects.Count == 0 || isWon) return;
         movedObjects[movedObjects.Count - 1].UnMoveObject();
     }
 
     public void OnReplayButtonClicked()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void OnQuitButtonClicked()
+    {
+        Application.Quit();
     }
 }
