@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
         InitializeLists();
     }
 
-    private void InitializeLists() //use dictionary instead?
+    private void InitializeLists()
     {
         MovableObject[] movables = FindObjectsOfType<MovableObject>();
         foreach (var movable in movables)

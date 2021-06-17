@@ -36,7 +36,7 @@ public class UserInput : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             mouseEndPos = Input.mousePosition;
-            if ((mouseStartPos - mouseEndPos).magnitude >= 0.5f && curRotatableObject != null && !isMovingObject)
+            if ((mouseStartPos - mouseEndPos).magnitude > 0 && curRotatableObject != null && !isMovingObject)
             {
                 isMovingObject = true; //To prevent registiring a second movement while the current movement is in progress.
                 curRotatableObject.MoveObject(Direction());
