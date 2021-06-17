@@ -8,7 +8,7 @@ public class RotatableObject : MonoBehaviour
 
     [HideInInspector]
     public bool isBusy;
-    [HideInInspector]
+    //[HideInInspector]
     public float height;
 
     private RotatableObject neighbor;
@@ -24,15 +24,12 @@ public class RotatableObject : MonoBehaviour
     {
         if (isBusy) { return; }
 
-        var neighborPos = new Vector3(transform.position.x,0f,transform.position.z) + rotationDirection;
+        var neighborPos = new Vector3(transform.position.x, 0f, transform.position.z) + rotationDirection;
 
         if (!GameManager.rotatableObjectPositions.ContainsKey(neighborPos))
         {
             isBusy = true;
-            transform.DOShakeScale(0.5f, rotationDirection, 1, 1, true).OnComplete(()=> 
-            {
-                transform.DOPlayBackwards();
-            });
+            transform.DOShakeScale(0.5f, rotationDirection/3f, 10, 90, true);
             return;
         }
 
@@ -40,14 +37,14 @@ public class RotatableObject : MonoBehaviour
         var pointToMoveTo = neighborPos + new Vector3(0, neighbor.height + height, 0);
 
         Sequence s = DOTween.Sequence();
-        s.Append(transform.DOJump(pointToMoveTo, 1, 1, 1f, false));
-        s.Join(transform.DORotate(-Vector3.Cross(rotationDirection,transform.up) * 180, 1f)).OnComplete(()=> 
-        {
-            transform.SetParent(neighbor.transform);
-            neighbor.height += height;
-            GetComponent<Collider>().enabled = false;
-            GameManager.rotatableObjectPositions.Remove(originalPosition);
-        });
+        s.Append(transform.DOJump(pointToMoveTo, 0.5f, 1, 0.3f, false));
+        s.Join(transform.DORotate(-Vector3.Cross(rotationDirection, transform.up) * 180, 0.3f)).OnComplete(() =>
+         {
+             transform.SetParent(neighbor.transform);
+             neighbor.height += height;
+             GetComponent<Collider>().enabled = false;
+             GameManager.rotatableObjectPositions.Remove(originalPosition);
+         });
 
         //Check if win condition is met
         //Add to UndoList

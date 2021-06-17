@@ -45,7 +45,7 @@ public class UserInput : MonoBehaviour
             {
                 curRotatableObject = hit.transform.GetComponent<RotatableObject>();
             }
-            if (mouseStartPos != mouseEndPos && curRotatableObject != null)
+            if ((mouseStartPos-mouseEndPos).magnitude >= 0.1f && curRotatableObject != null)
             {
                 curRotatableObject.RotateObject(Direction());
             }
