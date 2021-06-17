@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static Dictionary<Vector3,MovableObject> rotatableObjectPositions = new Dictionary<Vector3, MovableObject>();
+    public static List<MovableObject> movedObjects = new List<MovableObject>();
 
     private void Start()
     {
@@ -25,7 +26,7 @@ public class GameManager : MonoBehaviour
         var childMovableObject = movableObject.transform.GetChild(1).GetComponent<MovableObject>();
         if (childMovableObject != null)
         {
-            if (movableObject.objectType == ObjectType.Cap && childMovableObject.objectType == ObjectType.Cap)
+            if (movableObject.ObjectType == ObjectType.Cap && childMovableObject.ObjectType == ObjectType.Cap)
             {
                 Debug.Log("Congratulations you win!");
             }
@@ -34,5 +35,12 @@ public class GameManager : MonoBehaviour
         }
         else
         Debug.Log("the child isn't a movableObject");
+    }
+
+    public void OnUndoButtonClicked()
+    {
+        if (movedObjects.Count == 0) return;
+
+        movedObjects[movedObjects.Count - 1].UnMoveObject();
     }
 }

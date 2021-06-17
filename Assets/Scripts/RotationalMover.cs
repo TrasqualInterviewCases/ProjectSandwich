@@ -6,13 +6,25 @@ using DG.Tweening;
 
 public class RotationalMover : MoverBase
 {
+    Sequence s;
+
     public override void Move(Vector3 newPosition,Vector3 direction)
     {
-        Sequence s = DOTween.Sequence();
+        s = DOTween.Sequence().SetAutoKill(false);
         s.Append(transform.DOJump(newPosition, 0.5f, 1, 0.3f, false));
-        s.Join(transform.DORotate(-Vector3.Cross(direction, transform.up) * 180, 0.3f)).OnComplete(() =>
+        s.Join(transform.DORotate(-Vector3.Cross(direction, transform.up) * 180, 0.3f));
+        s.OnComplete(() =>
         {
-            MovementCompleted();
+            MovementCompleted(true);
+        });
+    }
+
+    public override void UnMove()
+    {
+        s.PlayBackwards();
+        s.OnRewind(() =>
+        {
+            MovementCompleted(false);
         });
     }
 }

@@ -16,7 +16,7 @@ public class MovableObject : MonoBehaviour
     private IShaker shaker;
 
     [HideInInspector]
-    public ObjectType objectType { get { return type; } }
+    public ObjectType ObjectType { get { return type; } }
 
     private void Start()
     {
@@ -52,18 +52,30 @@ public class MovableObject : MonoBehaviour
         mover.Move(pointToMoveTo, rotationDirection);
     }
 
-    private void OnMovementCompleteCallback()
+    private void OnMovementCompleteCallback(bool isForwardMovement)
     {
-        transform.SetParent(neighbor.transform);
-        neighbor.height += height;
-        GetComponent<Collider>().enabled = false;
-        GameManager.rotatableObjectPositions.Remove(originalPosition);
-        GameManager.CheckIfWinConditionIsMet(this);
-        //Add to UndoList
+        if (isForwardMovement)
+        {
+            transform.SetParent(neighbor.transform);
+            neighbor.height += height;
+            GetComponent<Collider>().enabled = false;
+            GameManager.rotatableObjectPositions.Remove(originalPosition);
+            GameManager.movedObjects.Add(this);
+            GameManager.CheckIfWinConditionIsMet(this);
+        }
+        else
+        {
+            Debug.Log("false complete message recieved.");
+            transform.SetParent(null);
+            neighbor.height -= height;
+            GetComponent<Collider>().enabled = true;
+            GameManager.rotatableObjectPositions.Add(originalPosition,this);
+            GameManager.movedObjects.Remove(this);
+        }
     }
 
-    public void UnRotateObject(/*RotationInfo*/)
+    public void UnMoveObject()
     {
-        //?? Rotate(List< rotationInfo(rotationPoint, rotationDirection, gameobject, parent = null)>().lastindexof)
+        mover.UnMove();
     }
 }
