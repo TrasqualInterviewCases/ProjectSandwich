@@ -10,8 +10,6 @@ public class UserInput : MonoBehaviour
     private Camera cam;
     private MovableObject curRotatableObject;
 
-    private bool isMovingObject;
-
     private void Start()
     {
         cam = Camera.main;
@@ -35,9 +33,8 @@ public class UserInput : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             mouseEndPos = Input.mousePosition;
-            if ((mouseStartPos - mouseEndPos).magnitude > 1f && curRotatableObject != null && !isMovingObject)
+            if ((mouseStartPos - mouseEndPos).magnitude > 1f && curRotatableObject != null)
             {
-                isMovingObject = true; //To prevent registiring a second movement while the current movement is in progress.
                 curRotatableObject.MoveObject(Direction());
             }
         }
@@ -47,7 +44,6 @@ public class UserInput : MonoBehaviour
             if (curRotatableObject != null)
             {
                 curRotatableObject = null;
-                isMovingObject = false;
             }
         }
     }

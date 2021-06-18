@@ -134,7 +134,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 471225868, guid: 2849db447ee6f7649ab635a1d448eb87, type: 3}
       propertyPath: duration
-      value: 0.15
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6702156864214813973, guid: 2849db447ee6f7649ab635a1d448eb87,
         type: 3}
@@ -342,7 +342,7 @@ PrefabInstance:
     - target: {fileID: 3371522883974527620, guid: e228a625b89069c4eaaae0990c649df8,
         type: 3}
       propertyPath: duration
-      value: 0.15
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8343153725321248892, guid: e228a625b89069c4eaaae0990c649df8,
         type: 3}
@@ -1007,7 +1007,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1540697829, guid: 34b8c50e0d2f8a74aa5eb2f19ad01aa9, type: 3}
       propertyPath: duration
-      value: 0.15
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4018180089474288515, guid: 34b8c50e0d2f8a74aa5eb2f19ad01aa9,
         type: 3}
@@ -1080,7 +1080,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 471225868, guid: 2849db447ee6f7649ab635a1d448eb87, type: 3}
       propertyPath: duration
-      value: 0.15
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6702156864214813973, guid: 2849db447ee6f7649ab635a1d448eb87,
         type: 3}
@@ -1769,7 +1769,7 @@ PrefabInstance:
     - target: {fileID: 3371522883974527620, guid: e228a625b89069c4eaaae0990c649df8,
         type: 3}
       propertyPath: duration
-      value: 0.15
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8343153725321248892, guid: e228a625b89069c4eaaae0990c649df8,
         type: 3}
@@ -1842,7 +1842,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1540697829, guid: 34b8c50e0d2f8a74aa5eb2f19ad01aa9, type: 3}
       propertyPath: duration
-      value: 0.15
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4018180089474288515, guid: 34b8c50e0d2f8a74aa5eb2f19ad01aa9,
         type: 3}
@@ -1915,7 +1915,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 471225868, guid: 2849db447ee6f7649ab635a1d448eb87, type: 3}
       propertyPath: duration
-      value: 0.15
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6702156864214813973, guid: 2849db447ee6f7649ab635a1d448eb87,
         type: 3}
