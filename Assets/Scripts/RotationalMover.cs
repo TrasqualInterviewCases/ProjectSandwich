@@ -3,7 +3,7 @@ using DG.Tweening;
 
 public class RotationalMover : MoverBase
 {
-    [SerializeField] private float duration = 0.1f;
+    [SerializeField] private float duration = 0.15f;
 
     Sequence s;
 
