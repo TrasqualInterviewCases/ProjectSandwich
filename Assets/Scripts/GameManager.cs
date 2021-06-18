@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     {
         if(instance != null)
         {
-            Destroy(this);
+            Destroy(instance);
         }
         instance = this;
     }
@@ -47,10 +47,10 @@ public class GameManager : MonoBehaviour
 
     public void CheckIfWinConditionIsMet()
     {
-        if(movedObjects.Count == movableObjects.Count-1)
+        if (movedObjects.Count == movableObjects.Count - 1)
         {
-        var highestObject = movableObjects.OrderByDescending(y => y.transform.position.y).First();
-        var lowestObject = movableObjects.OrderByDescending(y => y.transform.position.y).Last();
+            var highestObject = movableObjects.OrderByDescending(y => y.transform.position.y).First();
+            var lowestObject = movableObjects.OrderByDescending(y => y.transform.position.y).Last();
 
             if (lowestObject.ObjectType == ObjectType.Cap && highestObject.ObjectType == ObjectType.Cap)
             {

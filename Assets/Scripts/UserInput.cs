@@ -36,6 +36,7 @@ public class UserInput : MonoBehaviour
             if ((mouseStartPos - mouseEndPos).magnitude > 1f && curRotatableObject != null)
             {
                 curRotatableObject.MoveObject(Direction());
+                curRotatableObject = null;
             }
         }
 

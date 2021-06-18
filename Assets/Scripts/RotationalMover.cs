@@ -14,6 +14,7 @@ public class RotationalMover : MoverBase
         s.Join(transform.DORotate(-Vector3.Cross(direction, transform.up) * 180, duration).SetEase(Ease.Linear));
         s.OnComplete(() =>
         {
+            Debug.Log(true);
             MovementCompleted(true);
         });
     }
@@ -23,6 +24,7 @@ public class RotationalMover : MoverBase
         s.PlayBackwards();
         s.OnRewind(() =>
         {
+            Debug.Log(false);
             MovementCompleted(false);
         });
     }
